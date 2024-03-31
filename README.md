@@ -22,7 +22,7 @@ The VL53L0X sensor is connected to the microcontroller using the following pinou
 
 Refer to the following image for any clarifications:
 
-<!-- ![Image](Assets/pinout.jpg) -->
+![Image](Assets/pinout.jpg)
 
 ## Software
 
