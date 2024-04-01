@@ -37,7 +37,7 @@ for n in range(int(num_scans/2)):
     for i in range(32):
         val = int(s.readline().decode())
         y,x = val * math.cos(pi*i/16), val * math.sin(pi*i/16)
-        layer.append((x/10, y/10))
+        layer.append((x, y))
     layer.append((layer[0][0], layer[0][1]))
     x_y_coords.append(layer)
     print(x_y_coords)
@@ -46,7 +46,7 @@ for n in range(int(num_scans/2)):
     for i in range(32, 0, -1):
         val = int(s.readline().decode())
         y,x = val * math.cos(pi*i/16), val * math.sin(pi*i/16)
-        layer.append((x/10, y/10))
+        layer.append((x, y))
     layer.append((layer[0][0], layer[0][1]))
     x_y_coords.append(layer)
     print(x_y_coords)
@@ -61,14 +61,25 @@ s.close()
 
 
 x_segments = [[x[0] for x in sublist] for sublist in x_y_coords]
-y_segments = [[x[1] for x in sublist] for sublist in x_y_coords]
-z_values = [10 * i for i in range(num_scans)]
 
+y_segments = [[x[1] for x in sublist] for sublist in x_y_coords]
+
+x_segments = [segment[::-1] if i % 2 == 0 else segment for i, segment in enumerate(x_segments)]
+y_segments = [segment[::-1] if i % 2 == 0 else segment for i, segment in enumerate(y_segments)]
+
+z_values = [2 * i for i in range(num_scans)]
+
+lines = [[(x_segments[i][j], y_segments[i][j], 2*i) for i in range(num_scans)] for j in range(33)]
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
 
 for i in range(num_scans):
-    ax.plot(x_segments[i], y_segments[i], zs=z_values[i])
+    ax.plot(x_segments[i], y_segments[i], zs=z_values[i], color='black', linewidth=1)  # Lines in black
+    ax.scatter(x_segments[i], y_segments[i], zs=z_values[i], color='red', s=5)  # Points in red, adjust size (s) as needed
+
+for single_line in lines:
+    single_line_x, single_line_y, single_line_z = zip(*single_line)
+    ax.plot(single_line_x, single_line_y, zs=single_line_z, color='black', linewidth=2)  # Plotting single_line in blue
 
 ax.set_xlabel('X')
 ax.set_ylabel('Y')
