@@ -1,13 +1,15 @@
 # Written by Raj Pandya
 # For a 3D plot, scanning 32 times at 11.25 degrees each time
-# Generates 3 Z layers of data assuming they are spread out by 10 centimeters each
+# Generates num_scan Z layers of data assuming they are spread out by 1 meter each
+
+# this code is written to be run with matplotlib, to run with open3d, print the 
+# list contents, paste them into the conversion.py script, then run the open3d script
 
 import serial
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import math
-
-num_scans = 4 # must be even number
+num_scans = 8 # must be even number
 
 # Initialize the serial port
 s = serial.Serial(port='COM3', baudrate=115200, timeout=10)
@@ -75,11 +77,18 @@ ax = fig.add_subplot(111, projection='3d')
 
 for i in range(num_scans):
     ax.plot(x_segments[i], y_segments[i], zs=z_values[i], color='black', linewidth=1)  # Lines in black
-    ax.scatter(x_segments[i], y_segments[i], zs=z_values[i], color='red', s=5)  # Points in red, adjust size (s) as needed
+    ax.scatter(x_segments[i], y_segments[i], zs=z_values[i], color='black', s=5)  # Points in red, adjust size (s) as needed
 
 for single_line in lines:
     single_line_x, single_line_y, single_line_z = zip(*single_line)
     ax.plot(single_line_x, single_line_y, zs=single_line_z, color='black', linewidth=2)  # Plotting single_line in blue
+
+
+
+print(x_segments)
+print(y_segments)
+print(z_values)
+
 
 ax.set_xlabel('X')
 ax.set_ylabel('Y')

@@ -88,6 +88,22 @@ void PortF_Init(void)
 	GPIO_PORTF_DEN_R = 0b00010000; // Enable PM4 as digital pin
 }
 
+
+// Initialize onboard LEDs
+void PortN_Init(void){
+	SYSCTL_RCGCGPIO_R |= SYSCTL_RCGCGPIO_R12;				// Activate clock for Port N
+	while((SYSCTL_PRGPIO_R & SYSCTL_PRGPIO_R12) == 0){};	// Allow time for clock to stabilize
+	GPIO_PORTN_DIR_R |= 0x03;        								// Make PN0 and PN1 output (Built-in LEDs: D1 (PN1) and D2 (PN0))
+  GPIO_PORTN_AFSEL_R &= ~0x03;     								// Disable alt funct on PN0 and PN1
+  GPIO_PORTN_DEN_R |= 0x03;        								// Enable digital I/O on PN0 and PN1
+																									
+  GPIO_PORTN_AMSEL_R &= ~0x03;     								// Disable analog functionality on PN0 and PN1
+	return;
+}
+
+
+
+
 // XSHUT     This pin is an active-low shutdown input;
 //					the board pulls it up to VDD to enable the sensor by default.
 //					Driving this pin low puts the sensor into hardware standby. This input is not level-shifted.
@@ -113,7 +129,18 @@ int status = 0;
 
 
 void spin(int direction){
+	// if direction is 1, spin the shit clockwise, otherwise spin ccw
+	
+	
 	uint16_t Distance;
+	if (direction == 1){
+			GPIO_PORTN_DATA_R |= 0b0000001;
+	}
+	else {
+			GPIO_PORTN_DATA_R &= 0b1111110;
+	}
+	
+	
 	for (int m = 0; m < 32; m++)
 		{
 			int spinMotor = 0;
@@ -142,9 +169,10 @@ void spin(int direction){
 				}
 				
 				totalSteps++;
+				//turn the led shit on
 				GPIO_PORTF_DATA_R ^= 0b0010000;
 			}
-			SysTick_Wait10ms(10);
+			SysTick_Wait10ms(3);
 
 			status = VL53L1X_GetDistance(dev, &Distance);
 			sprintf(printf_buffer, "%u\r\n", Distance);
@@ -159,6 +187,18 @@ void spin(int direction){
 		}
 }
 
+void bus_pulse(){
+	while (1) {
+		GPIO_PORTH_DATA_R=0b00001111;
+		SysTick_Wait10ms(1);
+		GPIO_PORTH_DATA_R=0b00000000;
+		SysTick_Wait10ms(1);  
+ 
+	}
+}
+
+
+
 
 int main(void)
 {
@@ -170,19 +210,24 @@ int main(void)
 	uint16_t SpadNum;
 	uint8_t RangeStatus;
 
+	
 	// initialize
 	PLL_Init();
 	PortH_Init();
 	PortF_Init();
+	PortN_Init();
 	SysTick_Init();
 	onboardLEDs_Init();
+	
+	//bus_pulse();
+	
 	I2C_Init();
 	UART_Init();
 
 	char j;
 	char TxChar;
 	int input = 0;
-	int num_scans = 4; // must be an even number
+	int num_scans = 2; // must be an even number
 
 	status = VL53L1X_ClearInterrupt(dev); /* clear interrupt has to be called to enable next interrupt*/
 	status = VL53L1X_SensorInit(dev);
@@ -206,7 +251,8 @@ int main(void)
 			spin(-1);
 			SysTick_Wait10ms(25);
 		}
-				
+		spin(1);
+	
 		
 	}
 }

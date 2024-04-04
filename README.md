@@ -32,9 +32,15 @@ The software used in this project is Python 3.7.7 and the Matplotlib library. Th
 pip install matplotlib pyserial
 ```
 
+Additionally, if you would like to run it with open3D, ensure you are running a suitable version such as Python 3.7.7 and install using:
+
+```bash
+pip install open3d
+```
+
 It is perfered to run the code in an editor that supports Python, such as Visual Studio Code, however, you can achieve similar results by running the code in the command line with the command `python Software Config/room_scan.py`.
 
-## Software Configuration
+## Configuration
 
 To adjust the number of scans, you must change both the C++ and the Python files. In the C++ file, change the value of `num_scans` to the desired number of scans. In the Python file, change the value of `num_scans` to the same value as the C++ file. Note, in order to achieve an odd number of scans, you will need to add code to spin 1 additional time after the loop and scan these inputs into python.
 
@@ -49,4 +55,17 @@ The microcontroller is connected to the ToF sensor and the stepper motor. Using 
 
 
 ## Results
-TBW
+
+4 Layer scan of a container
+
+![alt text](Assets/container.png)
+
+8 Layer scan of a hallway with Matplotlib
+
+![alt text](Assets/mpl_hallway.png)
+
+8 Layer scan of a hallway with Open3d
+
+![alt text](Assets/scan_hall.jpg)
+
+
