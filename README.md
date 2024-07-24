@@ -1,10 +1,10 @@
 # 3D Spatial Simulation Mapping using ToF Sensors
 
 ## Introduction
-This project is aims to map a real life, 3 dimensional room into a interactable simulation throuhg the use of computer hardware and software. The simulation is done in Python using the Matplotlib library and the data is collected using Time of Flight (ToF) sensors with the MSP-EXP432E401Y microcontroller. 
+This project is aims to map a real life, 3 dimensional room into a intractable simulation through the use of computer hardware and software. The simulation is done in Python using the Matplotlib library and the data is collected using Time of Flight (ToF) sensors with the MSP-EXP432E401Y micro controller. 
 
 ## Hardware
-The hardware used in this project is the MSP-EXP432E401Y microcontroller, the VL53L0X Time-of-Flight Distance Sensor, and the 28BYJ-48 Stepper Motor. Connecting the stepper motor to its driver and the driver to the microcontroller is done using the following pinout:
+The hardware used in this project is the MSP-EXP432E401Y micro controller, the VL53L0X Time-of-Flight Distance Sensor, and the 28BYJ-48 Stepper Motor. Connecting the stepper motor to its driver and the driver to the micro controller is done using the following pinout:
 
 | Stepper Motor Pin | Micro Pin  |
 |-------------------|------------|
@@ -13,7 +13,7 @@ The hardware used in this project is the MSP-EXP432E401Y microcontroller, the VL
 | IN3               | PH2        |
 | IN4               | PH3        |
 
-The VL53L0X sensor is connected to the microcontroller using the following pinout:
+The VL53L0X sensor is connected to the micro controller using the following pinout:
 
 | Sensor Pin        | Micro Pin  |
 |-------------------|------------|
@@ -38,7 +38,7 @@ Additionally, if you would like to run it with open3D, ensure you are running a 
 pip install open3d
 ```
 
-It is perfered to run the code in an editor that supports Python, such as Visual Studio Code, however, you can achieve similar results by running the code in the command line with the command `python Software Config/room_scan.py`.
+It is preferred to run the code in an editor that supports Python, such as Visual Studio Code, however, you can achieve similar results by running the code in the command line with the command `python Software Config/room_scan.py`.
 
 ## Configuration
 
@@ -47,11 +47,11 @@ To adjust the number of scans, you must change both the C++ and the Python files
 
 ## Usage
 
-Once everything is set up and installed, load the C++ code onto the microcontroller and run the Python code. The microcontroller will scan the room and send the data to the Python code, which will then plot the data in a 3D simulation. The simulation can be interacted with using the mouse and keyboard. The mouse can be used to rotate the simulation and the keyboard can be used to move the simulation. 
+Once everything is set up and installed, load the C++ code onto the micro controller and run the Python code. The micro controller will scan the room and send the data to the Python code, which will then plot the data in a 3D simulation. The simulation can be interacted with using the mouse and keyboard. The mouse can be used to rotate the simulation and the keyboard can be used to move the simulation. 
 
 ## How it Works
 
-The microcontroller is connected to the ToF sensor and the stepper motor. Using half-stepping, the stepper motor is rotated 360 degrees at 11.25 degrees with 32 steps. The ToF sensor is connected to the motor and spun around allowing it to measure the distance at each step. Using the I2C communication protocol, the data is then sent to the microcontroller where it is then sent to the python script via UART communication. With the distance data and the number of points (used to determine the current angle), we can turn the data into a tuple of x, y, z coordinates. We can plot these coordinates in a 3D simulation using the Matplotlib library.
+The micro controller is connected to the ToF sensor and the stepper motor. Using half-stepping, the stepper motor is rotated 360 degrees at 11.25 degrees with 32 steps. The ToF sensor is connected to the motor and spun around allowing it to measure the distance at each step. Using the I2C communication protocol, the data is then sent to the micro controller where it is then sent to the python script via UART communication. With the distance data and the number of points (used to determine the current angle), we can turn the data into a tuple of x, y, z coordinates. We can plot these coordinates in a 3D simulation using the Matplotlib library.
 
 
 ## Results
